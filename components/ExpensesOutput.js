@@ -1,76 +1,18 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import ExpensesSummary from "./ExpensesSummary";
 import ExpensesList from "./ExpensesList";
 import { GlobalStyles } from "../constants/styles";
 
-const DUMMY_EXPENSES = [
-  {
-    id: "e1",
-    description: "A pair of shoees",
-    amount: 68.88,
-    date: new Date("2021-12-19"),
-  },
-  {
-    id: "e2",
-    description: "A pair of trousers",
-    amount: 89.88,
-    date: new Date("2021-01-22"),
-  },
-  {
-    id: "e3",
-    description: "Some bananas",
-    amount: 5.99,
-    date: new Date("2021-9-19"),
-  },
-  {
-    id: "e4",
-    description: "A pair of books",
-    amount: 15.88,
-    date: new Date("2022-02-19"),
-  },
-  {
-    id: "e5",
-    description: "More books",
-    amount: 18.99,
-    date: new Date("2022-02-19"),
-  },
-  {
-    id: "e6",
-    description: "A pair of shoees",
-    amount: 68.88,
-    date: new Date("2021-12-19"),
-  },
-  {
-    id: "e7",
-    description: "A pair of trousers",
-    amount: 89.88,
-    date: new Date("2021-01-22"),
-  },
-  {
-    id: "e8",
-    description: "Some bananas",
-    amount: 5.99,
-    date: new Date("2021-9-19"),
-  },
-  {
-    id: "e9",
-    description: "A pair of books",
-    amount: 15.88,
-    date: new Date("2022-02-19"),
-  },
-  {
-    id: "e10",
-    description: "More books",
-    amount: 18.99,
-    date: new Date("2022-02-19"),
-  },
-];
+function ExpensesOutput({ expenses, expensesPeriod, fallbackText }) {
+  let content = <Text style={styles.infoText}>{fallbackText}</Text>;
 
-function ExpensesOutput({ expenses, expensesPeriod }) {
+  if (expenses.length > 0) {
+    content = <ExpensesList expenses={expenses} />;
+  }
   return (
     <View style={styles.container}>
-      <ExpensesSummary expenses={DUMMY_EXPENSES} periodName={expensesPeriod} />
-      <ExpensesList expenses={DUMMY_EXPENSES} />
+      <ExpensesSummary expenses={expenses} periodName={expensesPeriod} />
+      <ExpensesList expenses={expenses} />
     </View>
   );
 }
@@ -82,5 +24,11 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 24,
     backgroundColor: GlobalStyles.colors.primary700,
+  },
+  infoText: {
+    color: "white",
+    fontSize: 16,
+    textAlign: "center",
+    marginTop: 32,
   },
 });
