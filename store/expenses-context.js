@@ -1,71 +1,9 @@
 import { createContext, useReducer } from "react";
 
-const DUMMY_EXPENSES = [
-  {
-    id: "e1",
-    description: "A pair of shoees",
-    amount: 68.88,
-    date: new Date("2023-07-24"),
-  },
-  {
-    id: "e2",
-    description: "A pair of trousers",
-    amount: 89.88,
-    date: new Date("2021-01-22"),
-  },
-  {
-    id: "e3",
-    description: "Some bananas",
-    amount: 5.99,
-    date: new Date("2023-08-19"),
-  },
-  {
-    id: "e4",
-    description: "A pair of books",
-    amount: 15.88,
-    date: new Date("2022-02-19"),
-  },
-  {
-    id: "e5",
-    description: "More books",
-    amount: 18.99,
-    date: new Date("2022-02-19"),
-  },
-  {
-    id: "e6",
-    description: "A pair of shoees",
-    amount: 68.88,
-    date: new Date("2021-12-19"),
-  },
-  {
-    id: "e7",
-    description: "A pair of trousers",
-    amount: 89.88,
-    date: new Date("2021-01-22"),
-  },
-  {
-    id: "e8",
-    description: "Some bananas",
-    amount: 5.99,
-    date: new Date("2021-09-19"),
-  },
-  {
-    id: "e9",
-    description: "A pair of books",
-    amount: 15.88,
-    date: new Date("2022-02-19"),
-  },
-  {
-    id: "e10",
-    description: "More books",
-    amount: 18.99,
-    date: new Date("2023-07-07"),
-  },
-];
-
 export const ExpensesContext = createContext({
   expenses: [],
   addExpense: ({ description, amount, date }) => {},
+  setExpenses: (expenses) => {},
   deleteExpense: (id) => {},
   updateExpense: (id, { description, amount, date }) => {},
 });
@@ -75,17 +13,12 @@ function expensesReducer(state, action) {
     case "ADD":
       const id = new Date().toString() + Math.random().toString();
       return [{ ...action.payload, id: id }, ...state];
+    case "SET":
+      return action.payload;
     case "UPDATE":
       const updatableExpenseIndex = state.findIndex(
         (expense) => expense.id === action.payload.id
       );
-
-      // // Check if the expense exists
-      // if (updatableExpenseIndex === -1) {
-      //   // You might want to handle this case differently, e.g.,
-      //   // by logging a warning, or even throwing an error.
-      //   return state;
-      // }
 
       const updatableExpense = state[updatableExpenseIndex];
       const updatedItem = { ...updatableExpense, ...action.payload.data };
@@ -100,10 +33,14 @@ function expensesReducer(state, action) {
 }
 
 function ExpensesContextProvider({ children }) {
-  const [expensesState, dispatch] = useReducer(expensesReducer, DUMMY_EXPENSES);
+  const [expensesState, dispatch] = useReducer(expensesReducer, []);
 
   function addExpense(expenseData) {
     dispatch({ type: "ADD", payload: expenseData });
+  }
+
+  function setExpenses(expenses) {
+    dispatch({ type: "SET", payload: expenses });
   }
 
   function deleteExpense(id) {
@@ -116,6 +53,7 @@ function ExpensesContextProvider({ children }) {
 
   const value = {
     expenses: expensesState,
+    setExpenses: setExpenses,
     addExpense: addExpense,
     deleteExpense: deleteExpense,
     updateExpense: updateExpense,
