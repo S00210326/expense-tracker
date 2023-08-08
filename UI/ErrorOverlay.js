@@ -7,7 +7,6 @@ function ErrorOverlay({ message, onConfirm }) {
     <View style={styles.container}>
       <Text style={[styles.text, styles.title]}>An Error Occured!</Text>
       <Text style={styles.text}>{message}</Text>
-      <Button onPress={onConfirm}>Okay</Button>
     </View>
   );
 }
